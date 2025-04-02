@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <launch>
-  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="-2.51 0.65 0.90 0 0 0 mocap_world panda_link0" />
   <!-- Rough estimate of the static tf, need calibration! -->
   <arg name="robot" default="panda" doc="choose your robot. Possible values: [panda, fr3]"/>
   <arg name="arm_id" default="$(arg robot)" />

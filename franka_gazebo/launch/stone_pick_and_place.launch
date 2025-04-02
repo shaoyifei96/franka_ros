@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define editable transform parameters -->
+  <arg name="mocap_to_world_x" default="0.35" doc="X offset from mocap_world to world frame [m]"/>
+  <arg name="mocap_to_world_y" default="-0.2" doc="Y offset from mocap_world to world frame [m]"/>
+  <arg name="mocap_to_world_z" default="0.0" doc="Z offset from mocap_world to world frame [m]"/>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="$(arg mocap_to_world_x) $(arg mocap_to_world_y) $(arg mocap_to_world_z) 0 0 0 mocap_world world" />
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="-2.51 0.65 0.90 0 0 0 mocap_world panda_link0" /> -->
+  <!-- this is the sim situation, in the real case we should directly transform mocap_world to panda_link0 -->
+  <!-- Launch Gazebo with the stone world -->
+  <include file="$(find franka_gazebo)/launch/panda.launch">
+    <arg name="x" value="-$(arg mocap_to_world_x)"/>
+    <arg name="y" value="0.2"/> <!-- not good, should be -$(arg mocap_to_world_y)!!!! but is buggy-->
+    <arg name="z" value="-$(arg mocap_to_world_z)"/>
+    <arg name="world" value="$(find franka_gazebo)/world/stone.sdf"/>
+    <arg name="controller" value="cartesian_impedance_example_controller"/>
+    <arg name="rviz" value="true"/>
+  </include>
+
+  <!-- Launch the stone pose publisher -->
+  <node name="stone_pose_publisher" 
+        pkg="franka_gazebo" 
+        type="publish_stone_pose.py" 
+        output="screen"/>
+</launch> 
