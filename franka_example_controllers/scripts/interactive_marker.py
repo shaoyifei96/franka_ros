@@ -141,20 +141,20 @@ def door_handle_callback(door_handle_pose_mocap):
         rotmat_grasp_offset_1 = np.array( [[0,0,-1],
                                            [0,-1,0],
                                            [-1,0,0]])
-        rotmat_grasp_offset_2 = np.array( [[-1, 0, 0],
-                                           [0, -1, 0],
-                                           [0, 0, 1]])
-        grasp_offset_rot_1 = R.from_dcm(rotmat_grasp_offset_1)
-        grasp_offset_rot_2 = R.from_dcm(rotmat_grasp_offset_2)
+        # rotmat_grasp_offset_2 = np.array( [[-1, 0, 0],
+        #                                    [0, -1, 0],
+        #                                    [0, 0, 1]])
+        grasp_offset_rot_1 = R.from_matrix(rotmat_grasp_offset_1)
+        # grasp_offset_rot_2 = R.from_matrix(rotmat_grasp_offset_2)
 
         # Calculate the target EE rotation in the link0 frame
         # Target EE orientation = Handle orientation * Desired Grasp Offset rotations
-        target_rot_link0 = handle_rot_link0 * grasp_offset_rot_1 * grasp_offset_rot_2
+        target_rot_link0 = handle_rot_link0 * grasp_offset_rot_1 #* grasp_offset_rot_2
 
         # Calculate the target EE position in the link0 frame
         # Define the desired EE position offset relative to the handle frame (in handle's coords)
         # e.g., move 13cm back along the handle's Z-axis
-        position_offset_handle_frame = np.array([0, 0, -0.13])
+        position_offset_handle_frame = np.array([0.12, 0, 0.0])
         # Transform this offset vector from handle frame to link0 frame
         position_offset_link0_frame = handle_rot_link0.apply(position_offset_handle_frame)
 
